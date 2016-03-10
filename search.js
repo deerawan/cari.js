@@ -10,6 +10,13 @@ let elasticlunrIndex = elasticlunr(function() {
   this.saveDocument(false);
 });
 
+let elasticlunrIndexWithDocumentCopy = elasticlunr(function() {
+  this.addField('title');
+  this.addField('body');
+  this.setRef('_ref');
+  this.saveDocument(true);
+});
+
 let lunrIndex = lunr(function() {
   this.field('title', { boost: 10 });
   this.field('body');
@@ -27,10 +34,10 @@ const Benchmark = require('benchmark');
 let suite = new Benchmark.Suite;
 
 suite
-  .add('elasticlunr#index.search', () => {
+  .add('lunr#index.search', () => {
     lunrIndex.search('invoice');
   })
-  .add('lunr#index.search', () => {
+  .add('elasticlunr#index.search', () => {
     elasticlunrIndex.search('invoice', {
       fields: {
         title: { boost: 2 },
