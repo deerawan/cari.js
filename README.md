@@ -5,4 +5,4 @@
 - Adding documents to search index
   - `Fastest is lunr#index.add`
 - Simple search
-  - `Fastest is elasticlunr#index.search`
+  - `Fastest is lunr#index.search`
