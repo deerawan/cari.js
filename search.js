@@ -2,6 +2,11 @@
 
 const elasticlunr = require('elasticlunr');
 const lunr = require('lunr');
+const feeds = require('./fixtures/data');
+const Benchmark = require('benchmark');
+const helpers = require('./helpers');
+
+let suite = new Benchmark.Suite;
 
 let elasticlunrIndex = elasticlunr(function() {
   this.addField('title');
@@ -23,20 +28,13 @@ let lunrIndex = lunr(function() {
   this.ref('_ref');
 });
 
-let feeds = require('./fixtures/data');
-
 feeds.forEach((feed) => {
-  elasticlunrIndex.addDoc(feed);
-  lunrIndex.add(feed);
+  elasticlunrIndex.addDoc(helpers.transform(feed));
+  elasticlunrIndexWithDocumentCopy.addDoc(helpers.transform(feed));
+  lunrIndex.add(helpers.transform(feed));
 });
 
-const Benchmark = require('benchmark');
-let suite = new Benchmark.Suite;
-
 suite
-  .add('lunr#index.search', () => {
-    lunrIndex.search('invoice');
-  })
   .add('elasticlunr#index.search', () => {
     elasticlunrIndex.search('invoice', {
       fields: {
@@ -44,6 +42,17 @@ suite
         body: { boost: 1 },
       }
     });
+  })
+  .add('elasticlunr(with documents copy)#index.search', () => {
+    elasticlunrIndexWithDocumentCopy.search('invoice', {
+      fields: {
+        title: { boost: 2 },
+        body: { boost: 1 },
+      }
+    });
+  })
+  .add('lunr#index.search', () => {
+    lunrIndex.search('invoice');
   })
   .on('complete', function() {
     console.log('Fastest is ' + this.filter('fastest').map('name'));
