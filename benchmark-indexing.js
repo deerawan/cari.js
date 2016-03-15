@@ -2,11 +2,10 @@
 
 const elasticlunr = require('elasticlunr');
 const lunr = require('lunr');
-const feeds = require('./fixtures/data');
 const Benchmark = require('benchmark');
 const helpers = require('./helpers');
-
-let suite = new Benchmark.Suite;
+const factory = require('AutoFixture');
+require('./fixtures/fixture')(factory);
 
 let elasticlunrIndex = elasticlunr(function() {
   this.addField('id');
@@ -30,6 +29,9 @@ let lunrIndex = lunr(function() {
   this.field('body');
   this.ref('_ref');
 });
+
+let suite = new Benchmark.Suite;
+const feeds = factory.createListOf('Document', process.argv[2] || 5000);
 
 suite
   .add('elasticlunr#indexing', () => {

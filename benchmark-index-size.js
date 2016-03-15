@@ -18,8 +18,6 @@ const helpers = require('./helpers');
 const factory = require('AutoFixture');
 require('./fixtures/fixture')(factory);
 
-const feeds = factory.createListOf('Document', process.argv[2] || 5000);
-
 let elasticlunrIndex = elasticlunr(function() {
   this.addField('id');
   this.addField('title');
@@ -58,6 +56,7 @@ function getFileSize(filename) {
 }
 
 // === WRITE INDEX TO FILE
+const feeds = factory.createListOf('Document', process.argv[2] || 5000);
 
 feeds.forEach((feed) => elasticlunrIndex.addDoc(helpers.transform(feed)));
 writeToFile('index-elasticlunr.json', elasticlunrIndex.index);
