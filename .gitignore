@@ -1,3 +1,4 @@
+index-*.json
 node_modules
 .tmp/
 *.log
