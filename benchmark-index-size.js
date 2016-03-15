@@ -1,13 +1,24 @@
+/**
+ * Benchmarking index size. Index will be stored as a json file
+ * to compare the size between them.
+ *
+ * Usage:
+ * node benchmark-index-size <total_documents (default 5000)>
+ *
+ * Example:
+ * node benchmark-index-size 3000
+ */
+
 'use strict';
 
 const fs = require('fs');
 const elasticlunr = require('elasticlunr');
 const lunr = require('lunr');
-const feeds = require('./fixtures/data');
-const Benchmark = require('benchmark');
 const helpers = require('./helpers');
+const factory = require('AutoFixture');
+require('./fixtures/fixture')(factory);
 
-let suite = new Benchmark.Suite;
+const feeds = factory.createListOf('Document', process.argv[2] || 5000);
 
 let elasticlunrIndex = elasticlunr(function() {
   this.addField('id');
@@ -32,6 +43,8 @@ let lunrIndex = lunr(function() {
   this.ref('_ref');
 });
 
+// === FUNCTIONS
+
 var files = [];
 function writeToFile(filename, data) {
   var filePath = __dirname + '/' + filename;
@@ -44,6 +57,8 @@ function getFileSize(filename) {
  return fs.statSync(filename).size;
 }
 
+// === WRITE INDEX TO FILE
+
 feeds.forEach((feed) => elasticlunrIndex.addDoc(helpers.transform(feed)));
 writeToFile('index-elasticlunr.json', elasticlunrIndex.index);
 
@@ -52,6 +67,8 @@ writeToFile('index-elasticlunr-doc-copy.json', elasticlunrIndexWithDocumentCopy.
 
 feeds.forEach((feed) => lunrIndex.add(helpers.transform(feed)));
 writeToFile('index-lunr.json', lunrIndex.toJSON());
+
+// === FIND MAX AND MIN OF FILE
 
 // Find max
 var file = files.reduce(function(prev, current) {

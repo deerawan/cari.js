@@ -9,8 +9,10 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "autofixture": "^0.1.0",
     "benchmark": "^2.1.0",
     "elasticlunr": "^0.8.8",
+    "faker": "^3.0.1",
     "lodash": "^4.6.1",
     "lunr": "^0.7.0",
     "microtime": "^2.0.0",
