@@ -26,19 +26,19 @@ let elasticlunrIndexWithDocumentCopy = elasticlunr(function() {
 
 let lunrIndex = lunr(function() {
   this.field('id');
-  this.field('title', { boost: 10 });
+  this.field('title');
   this.field('body');
   this.ref('_ref');
 });
 
 suite
-  .add('elasticlunr#index.addDoc', () => {
+  .add('elasticlunr#indexing', () => {
     feeds.forEach((feed) => elasticlunrIndex.addDoc(helpers.transform(feed)));
   })
-  .add('elasticlunr(with document copy)#index.addDoc', () => {
+  .add('elasticlunr(with document copy)#indexing', () => {
     feeds.forEach((feed) => elasticlunrIndexWithDocumentCopy.addDoc(helpers.transform(feed)));
   })
-  .add('lunr#index.add', () => {
+  .add('lunr#indexing', () => {
     feeds.forEach((feed) => lunrIndex.add(helpers.transform(feed)));
   })
   .on('complete', function() {

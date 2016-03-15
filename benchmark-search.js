@@ -24,7 +24,7 @@ let elasticlunrIndexWithDocumentCopy = elasticlunr(function() {
 
 let lunrIndex = lunr(function() {
   this.field('title', { boost: 10 });
-  this.field('body');
+  this.field('body', { boost: 1 });
   this.ref('_ref');
 });
 
@@ -35,23 +35,25 @@ feeds.forEach((feed) => {
 });
 
 suite
-  .add('elasticlunr#index.search', () => {
+  .add('elasticlunr#search', () => {
     elasticlunrIndex.search('invoice', {
       fields: {
-        title: { boost: 2 },
-        body: { boost: 1 },
-      }
+        title: { boost: 10 },
+        body: { boost: 1 }
+      },
+      expand: true
     });
   })
-  .add('elasticlunr(with documents copy)#index.search', () => {
+  .add('elasticlunr(with documents copy)#search', () => {
     elasticlunrIndexWithDocumentCopy.search('invoice', {
       fields: {
-        title: { boost: 2 },
+        title: { boost: 10 },
         body: { boost: 1 },
-      }
+      },
+      expand: true
     });
   })
-  .add('lunr#index.search', () => {
+  .add('lunr#search', () => {
     lunrIndex.search('invoice');
   })
   .on('complete', function() {

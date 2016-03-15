@@ -29,7 +29,7 @@ exports.transform = (feed) => {
       document.title = params.category;
       break;
     case 'Client':
-      document.title = [params.name, params.email].join(' ')
+      document.title = [params.name, params.email].join(' ');
       break;
   }
   return document;
