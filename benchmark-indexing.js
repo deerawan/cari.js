@@ -3,7 +3,6 @@
 const elasticlunr = require('elasticlunr');
 const lunr = require('lunr');
 const Benchmark = require('benchmark');
-const helpers = require('./helpers');
 const factory = require('AutoFixture');
 require('./fixtures/fixture')(factory);
 
@@ -35,13 +34,13 @@ const feeds = factory.createListOf('Document', process.argv[2] || 5000);
 
 suite
   .add('elasticlunr#indexing', () => {
-    feeds.forEach((feed) => elasticlunrIndex.addDoc(helpers.transform(feed)));
+    feeds.forEach((feed) => elasticlunrIndex.addDoc(feed));
   })
   .add('elasticlunr(with document copy)#indexing', () => {
-    feeds.forEach((feed) => elasticlunrIndexWithDocumentCopy.addDoc(helpers.transform(feed)));
+    feeds.forEach((feed) => elasticlunrIndexWithDocumentCopy.addDoc(feed));
   })
   .add('lunr#indexing', () => {
-    feeds.forEach((feed) => lunrIndex.add(helpers.transform(feed)));
+    feeds.forEach((feed) => lunrIndex.add(feed));
   })
   .on('complete', function() {
     console.log('Fastest is ' + this.filter('fastest').map('name'));

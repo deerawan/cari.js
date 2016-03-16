@@ -6,3 +6,8 @@
   - `Fastest is lunr#index.add`
 - Simple search
   - `Fastest is lunr#index.search`
+- Index Size for 5000 docs
+  - The biggest size:
+    - `index-elasticlunr-doc-copy.json`
+  - The smallest size:
+    - `index-lunr.json`

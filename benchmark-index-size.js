@@ -14,7 +14,6 @@
 const fs = require('fs');
 const elasticlunr = require('elasticlunr');
 const lunr = require('lunr');
-const helpers = require('./helpers');
 const factory = require('AutoFixture');
 require('./fixtures/fixture')(factory);
 
@@ -58,19 +57,19 @@ function getFileSize(filename) {
 // === WRITE INDEX TO FILE
 const feeds = factory.createListOf('Document', process.argv[2] || 5000);
 
-feeds.forEach((feed) => elasticlunrIndex.addDoc(helpers.transform(feed)));
+feeds.forEach((feed) => elasticlunrIndex.addDoc(feed));
 writeToFile('index-elasticlunr.json', elasticlunrIndex.index);
 
-feeds.forEach((feed) => elasticlunrIndexWithDocumentCopy.addDoc(helpers.transform(feed)));
+feeds.forEach((feed) => elasticlunrIndexWithDocumentCopy.addDoc(feed));
 writeToFile('index-elasticlunr-doc-copy.json', elasticlunrIndexWithDocumentCopy.index);
 
-feeds.forEach((feed) => lunrIndex.add(helpers.transform(feed)));
+feeds.forEach((feed) => lunrIndex.add(feed));
 writeToFile('index-lunr.json', lunrIndex.toJSON());
 
 // === FIND MAX AND MIN OF FILE
 
 // Find max
-var file = files.reduce(function(prev, current) {
+var file = files.reduce((prev, current) => {
   if (prev.size > current.size) {
     return prev;
   }
@@ -79,7 +78,7 @@ var file = files.reduce(function(prev, current) {
 console.log('The biggest size:\n' + file.name + ' (' + file.size + ')');
 
 // Find min
-var file = files.reduce(function(prev, current) {
+var file = files.reduce((prev, current) => {
   if (prev.size < current.size) {
     return prev;
   }
