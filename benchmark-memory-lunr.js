@@ -24,4 +24,3 @@ var diff = hd.end();
 
 console.log(diff);
 console.log('After Heap: ' + diff.after.size);
-
