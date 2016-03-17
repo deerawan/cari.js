@@ -34,9 +34,11 @@ feeds.forEach((feed) => {
 });
 
 let suite = new Benchmark.Suite;
+var searchTerm = 'ab';
+
 suite
   .add('elasticlunr#search', () => {
-    elasticlunrIndex.search('invoice', {
+    elasticlunrIndex.search(searchTerm, {
       fields: {
         title: { boost: 10 },
         body: { boost: 1 }
@@ -45,7 +47,7 @@ suite
     });
   })
   .add('elasticlunr(with documents copy)#search', () => {
-    elasticlunrIndexWithDocumentCopy.search('invoice', {
+    elasticlunrIndexWithDocumentCopy.search(searchTerm, {
       fields: {
         title: { boost: 10 },
         body: { boost: 1 },
@@ -54,7 +56,7 @@ suite
     });
   })
   .add('lunr#search', () => {
-    lunrIndex.search('invoice');
+    lunrIndex.search(searchTerm);
   })
   .on('complete', function() {
     console.log('Fastest is ' + this.filter('fastest').map('name'));

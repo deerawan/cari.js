@@ -33,14 +33,14 @@ let suite = new Benchmark.Suite;
 const feeds = factory.createListOf('Document', process.argv[2] || 5000);
 
 suite
-  .add('lunr#indexing', () => {
-    feeds.forEach((feed) => lunrIndex.add(feed));
-  })
   .add('elasticlunr#indexing', () => {
-    feeds.forEach((feed) => elasticlunrIndex.addDoc(feed));
+    feeds.forEach((feed) => elasticlunrIndex.updateDoc(feed));
   })
   .add('elasticlunr(with document copy)#indexing', () => {
-    feeds.forEach((feed) => elasticlunrIndexWithDocumentCopy.addDoc(feed));
+    feeds.forEach((feed) => elasticlunrIndexWithDocumentCopy.updateDoc(feed));
+  })
+  .add('lunr#indexing', () => {
+    feeds.forEach((feed) => lunrIndex.update(feed));
   })
   .on('complete', function() {
     console.log('Fastest is ' + this.filter('fastest').map('name'));
