@@ -4,7 +4,11 @@ module.exports = function(factory) {
 
   factory.define('Document', [
     'id',
-    'title',
-    'body'
+    'title'.as(function() {
+      return faker.name.findName();
+    }),
+    'body'.as(function() {
+      return faker.lorem.paragraph();
+    })
   ]);
 };
